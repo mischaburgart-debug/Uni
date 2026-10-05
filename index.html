@@ -1,0 +1,52 @@
+https://script.google.com/macros/s/AKfycbxRCSbrAb-LWuLd_rCuIgNVLUkQcUXy7fpbyMVZO6pz9i_-468PHRsAjLFZVH0vWlfT/exec
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Mein Uni Projekt</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, textarea, button { width: 100%; margin: 10px 0; padding: 10px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>Feedback an Google Sheets senden</h2>
+    <form id="feedbackForm">
+        <input type="text" id="name" placeholder="Dein Name" required>
+        <textarea id="nachricht" placeholder="Deine Nachricht" required></textarea>
+        <button type="submit">Absenden</button>
+    </form>
+    <p id="status"></p>
+
+    <script>
+        // HIER DEINE URL AUS GOOGLE APPS SCRIPT EINTRAGEN:
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRCSbrAb-LWuLd_rCuIgNVLUkQcUXy7fpbyMVZO6pz9i_-468PHRsAjLFZVH0vWlfT/exec";
+
+        document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('status').innerText = "Wird gesendet...";
+            
+            const payload = {
+                name: document.getElementById('name').value,
+                nachricht: document.getElementById('nachricht').value
+            };
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', // Verhindert CORS-Probleme im Browser
+                cache: 'no-cache',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(() => {
+                document.getElementById('status').innerText = "Erfolgreich im Google Sheet gespeichert!";
+                document.getElementById('feedbackForm').reset();
+            }).catch(error => {
+                document.getElementById('status').innerText = "Fehler beim Senden.";
+                console.error(error);
+            });
+        });
+    </script>
+</body>
+</html>
